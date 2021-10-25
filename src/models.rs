@@ -64,20 +64,20 @@ const PRESSURE_MIN: f64 = 0.25;
 const PRESSURE_MAX: f64 = 2.0;
 
 impl Planet {
-    pub fn apply_filters(&mut self, conditions: &FilterConditions, filters: &Filters) -> bool {
+    pub fn apply_filters(&mut self, filters: &Filters) -> bool {
         self.filtered = false;
         self.filtered = if filters.env_filter {
-            (match conditions.surface {
+            (match filters.surface {
                 SurfaceOption::Rocky => self.surface,
                 SurfaceOption::Gaseous => !self.surface,
                 SurfaceOption::Both => true,
             })
-            && self.check_extremes(&conditions.gravity, self.gravity,
-                        conditions.inc_normal, GRAVITY_MIN, GRAVITY_MAX)
-            && self.check_extremes(&conditions.temp, self.temp,
-                        conditions.inc_normal, TEMP_MIN, TEMP_MAX)
-            && self.check_extremes(&conditions.pressure, self.pressure,
-                        conditions.inc_normal, PRESSURE_MIN, PRESSURE_MAX)
+            && self.check_extremes(&filters.gravity, self.gravity,
+                        filters.inc_normal, GRAVITY_MIN, GRAVITY_MAX)
+            && self.check_extremes(&filters.temp, self.temp,
+                        filters.inc_normal, TEMP_MIN, TEMP_MAX)
+            && self.check_extremes(&filters.pressure, self.pressure,
+                        filters.inc_normal, PRESSURE_MIN, PRESSURE_MAX)
 
         } else {
             true
@@ -238,12 +238,12 @@ impl Universe {
             }
         }
     }
-    pub fn apply_filters(&mut self, conditions: &FilterConditions, filters: &Filters) {
+    pub fn apply_filters(&mut self, filters: &Filters) {
 
         self.diagnostics = Diagnostics::new();
 
         for planet in self.planets.iter_mut() {
-            if planet.apply_filters(&conditions, &filters) {
+            if planet.apply_filters(&filters) {
                 self.diagnostics.planets_with_env += 1;
             }
         }
@@ -254,6 +254,7 @@ impl Universe {
         self.stars
             .iter_mut()
             .for_each(|s| s.res_factor = 0.0);
+
 
 
         if self.selected_res.eq("- None -") {
@@ -415,44 +416,31 @@ pub fn to_env_option(s: &str) -> EnvironmentOption {
 }
 
 #[derive(PartialEq, Clone, Debug)]
-pub struct FilterConditions {
+pub struct Filters {
+    pub env_filter: bool,
     pub inc_normal: bool,
     pub surface: SurfaceOption,
     pub gravity: EnvironmentOption,
     pub temp: EnvironmentOption,
     pub pressure: EnvironmentOption,
-}
-
-impl FilterConditions {
-    pub fn new() -> Self {
-        Self {
-            inc_normal: true,
-            surface: SurfaceOption::Rocky,
-            gravity: EnvironmentOption::Normal,
-            temp: EnvironmentOption::Normal,
-            pressure: EnvironmentOption::Normal,
-        }
-    }
-}
-
-#[derive(PartialEq, Clone, Debug)]
-pub struct Filters {
-    pub env_filter: bool,
-    pub selected_res: String,
     pub stars_filter_map: HashMap<String, f64>
 }
-
-impl ImplicitClone for Filters{}
 
 impl Filters {
     pub fn new() -> Self {
         Self {
             env_filter: true,
-            selected_res: String::new(),
+            inc_normal: true,
+            surface: SurfaceOption::Rocky,
+            gravity: EnvironmentOption::Normal,
+            temp: EnvironmentOption::Normal,
+            pressure: EnvironmentOption::Normal,
             stars_filter_map: HashMap::new(),
         }
     }
 }
+
+impl ImplicitClone for Filters{}
 
 #[allow(dead_code)]
 pub enum Position {

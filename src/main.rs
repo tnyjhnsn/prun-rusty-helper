@@ -31,7 +31,6 @@ struct PrUnApp {
     is_loading: bool,
     universe: Universe,
     map_features: MapFeatures,
-    filter_conditions: FilterConditions,
     filters: Filters,
     fetch_stars: Option<FetchTask>,
     fetch_planets: Option<FetchTask>,
@@ -69,7 +68,6 @@ impl Component for PrUnApp {
             is_loading: true,
             universe: Universe::new(),
             map_features: MapFeatures::new(),
-            filter_conditions: FilterConditions::new(),
             filters: Filters::new(),
             fetch_stars: None,
             fetch_planets: None,
@@ -176,32 +174,32 @@ impl Component for PrUnApp {
                     Toggle::ShowRoutes => self.map_features.show_routes = b,
                     Toggle::IncEnvFilter => {
                         self.filters.env_filter = b;
-                        self.universe.apply_filters(&self.filter_conditions, &self.filters);
+                        self.universe.apply_filters(&self.filters);
                     },
                     Toggle::IncNormal => {
-                        self.filter_conditions.inc_normal = b;
-                        self.universe.apply_filters(&self.filter_conditions, &self.filters);
+                        self.filters.inc_normal = b;
+                        self.universe.apply_filters(&self.filters);
                     },
                 };
                 return true
             }
             Msg::Surface(surface) => {
-                self.filter_conditions.surface = surface;
-                self.universe.apply_filters(&self.filter_conditions, &self.filters);
+                self.filters.surface = surface;
+                self.universe.apply_filters(&self.filters);
                 return true
             }
             Msg::Environment((env, option)) => {
                 match env {
-                    Environment::Gravity => self.filter_conditions.gravity = option,
-                    Environment::Temp => self.filter_conditions.temp = option,
-                    Environment::Pressure => self.filter_conditions.pressure = option,
+                    Environment::Gravity => self.filters.gravity = option,
+                    Environment::Temp => self.filters.temp = option,
+                    Environment::Pressure => self.filters.pressure = option,
                 }
-                self.universe.apply_filters(&self.filter_conditions, &self.filters);
+                self.universe.apply_filters(&self.filters);
                 return true
             }
             Msg::SelectedRes(res) => {
                 self.universe.selected_res = res;
-                self.universe.apply_filters(&self.filter_conditions, &self.filters);
+                self.universe.apply_filters(&self.filters);
                 return true
             }
             Msg::TestMe => {
@@ -251,7 +249,7 @@ impl Component for PrUnApp {
                                 toggle_signal=self.link.callback(Msg::Toggle) />
                             <EditFilters
                                 env_filter=self.filters.env_filter
-                                inc_normal=self.filter_conditions.inc_normal
+                                inc_normal=self.filters.inc_normal
                                 res_list=self.universe.res_list.clone()
                                 toggle_signal=self.link.callback(Msg::Toggle)
                                 surface_signal=self.link.callback(Msg::Surface)
