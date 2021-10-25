@@ -1,6 +1,6 @@
 [package]
-name = "rusty-prun-little-helper"
-description = "Rusty PrUn Little Helper"
+name = "prun-rusty-little-helper"
+description = "PrUn Rusty Little Helper"
 version = "0.1.0"
 authors = ["Tony Johnson <tony@tosp.net.au>"]
 edition = "2018"
