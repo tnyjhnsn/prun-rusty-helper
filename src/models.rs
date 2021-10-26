@@ -174,7 +174,7 @@ impl Universe {
         }
     }
     pub fn fix_star_y(&mut self) {
-        for star in self.stars.iter_mut() {
+        for star in &mut self.stars {
             star.y *= -1.0;
         }
     }
@@ -242,7 +242,7 @@ impl Universe {
 
         self.diagnostics = Diagnostics::new();
 
-        for planet in self.planets.iter_mut() {
+        for planet in &mut self.planets {
             if planet.apply_filters(&filters) {
                 self.diagnostics.planets_with_env += 1;
             }
@@ -268,7 +268,7 @@ impl Universe {
                 }
             }
         } else {
-            for resource in self.resources.iter_mut() {
+            for resource in &mut self.resources {
                 if resource.ticker.eq(&self.selected_res) {
                     resource.filtered = true;
                     self.diagnostics.planets_with_res += 1;
