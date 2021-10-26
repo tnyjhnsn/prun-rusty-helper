@@ -157,23 +157,28 @@ impl Canvas {
             let selected_res = &self.props.universe.selected_res;
 
             if star.res_factor.gt(&0.0) {
-                if selected_res.eq(&"- None -") {
-                    match self.props.env_filter {
-                        true => self.draw_star_circle(&ctx, x, y,
-                                StarSize::LARGE, StarColour::ENV_ONLY, Fill::Filled),
-                        false => self.draw_star_circle(&ctx, x, y,
-                               StarSize::PINPOINT, StarColour::PINPOINT, Fill::Filled),
+                match selected_res {
+                    Some(res) => {
+                        let max_factor =
+                            res_max_factor.get(res).unwrap();
+                        let conc = star.res_factor/max_factor;
+                        let colour = match conc {
+                            c if c >= 0.66 => "#4caf50",
+                            c if c >= 0.33 => "#ff9800",
+                            _=> "#f44336",
+                        };
+                        self.draw_star_circle(&ctx, x, y, StarSize::LARGE, colour, Fill::Filled)
                     }
-                } else {
-                    let max_factor = res_max_factor.get(selected_res).unwrap();
-                    let conc = star.res_factor/max_factor;
-                    let colour = match conc {
-                        c if c >= 0.66 => "#4caf50",
-                        c if c >= 0.33 => "#ff9800",
-                        _=> "#f44336",
-                    };
-                    self.draw_star_circle(&ctx, x, y, StarSize::LARGE, colour, Fill::Filled)
+                    None => {
+                        match self.props.env_filter {
+                            true => self.draw_star_circle(&ctx, x, y,
+                                    StarSize::LARGE, StarColour::ENV_ONLY, Fill::Filled),
+                            false => self.draw_star_circle(&ctx, x, y,
+                                   StarSize::PINPOINT, StarColour::PINPOINT, Fill::Filled),
+                        }
+                    }
                 }
+
             } else {
                 self.draw_star_circle(&ctx, x, y, StarSize::PINPOINT, StarColour::PINPOINT, Fill::Filled)
             }

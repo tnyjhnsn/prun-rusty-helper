@@ -52,7 +52,7 @@ enum Msg {
     Toggle((Toggle, bool)),
     Surface(SurfaceOption),
     Environment((Environment, EnvironmentOption)),
-    SelectedRes(String),
+    SelectedRes(Option<String>),
     TestMe,
 }
 

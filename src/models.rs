@@ -152,7 +152,7 @@ pub struct Universe {
     pub resources: Vec<Resource>,
     pub star_list: Vec<String>,
     pub res_list: Vec<String>,
-    pub selected_res: String,
+    pub selected_res: Option<String>,
     pub res_max_factor: HashMap<String, f64>,
     pub diagnostics: Diagnostics,
 }
@@ -168,7 +168,7 @@ impl Universe {
             resources: Vec::new(),
             star_list: Vec::new(),
             res_list: Vec::new(),
-            selected_res: String::from("- None -"),
+            selected_res: None,
             res_max_factor: HashMap::new(),
             diagnostics: Diagnostics::new(),
         }
@@ -206,7 +206,7 @@ impl Universe {
             .cloned()
             .collect();
         self.res_list.sort();
-        self.res_list.insert(0, "- None -".to_string());
+        self.res_list.insert(0, "-None-".to_string());
     }
     // TODO Error checks to be added
     pub fn star_from_name(&self, name: String) -> Option<Star> {
@@ -256,38 +256,40 @@ impl Universe {
             .for_each(|s| s.res_factor = 0.0);
 
 
-
-        if self.selected_res.eq("- None -") {
-            for planet in self.planets.iter() {
-                if planet.filtered {
-                    let star = self.stars
-                        .iter_mut()
-                        .find(|s| s.sys_id.eq(&planet.sys_id))
-                        .unwrap();
-                    star.res_factor = 1.0;
+        match &self.selected_res {
+            Some(res) => {
+                for resource in &mut self.resources {
+                    if resource.ticker.eq(res) {
+                        resource.filtered = true;
+                        self.diagnostics.planets_with_res += 1;
+                        let planet = self.planets
+                            .iter()
+                            .find(|p| p.nat_id.eq(&resource.planet))
+                            .unwrap();
+                        if planet.filtered {
+                            let star = self.stars
+                                .iter_mut()
+                                .find(|s| s.sys_id.eq(&planet.sys_id))
+                                .unwrap();
+                            star.res_factor = star.res_factor.max(resource.factor);
+                            self.diagnostics.filter_hits.push((planet.clone(), resource.clone()));
+                        }
+                    }
                 }
+                self.diagnostics.filter_hits.sort_by(
+                    |a, b| b.1.factor.partial_cmp(&a.1.factor).unwrap());
             }
-        } else {
-            for resource in &mut self.resources {
-                if resource.ticker.eq(&self.selected_res) {
-                    resource.filtered = true;
-                    self.diagnostics.planets_with_res += 1;
-                    let planet = self.planets
-                        .iter()
-                        .find(|p| p.nat_id.eq(&resource.planet))
-                        .unwrap();
+            None => {
+                for planet in self.planets.iter() {
                     if planet.filtered {
                         let star = self.stars
                             .iter_mut()
                             .find(|s| s.sys_id.eq(&planet.sys_id))
                             .unwrap();
-                        star.res_factor = star.res_factor.max(resource.factor);
-                        self.diagnostics.filter_hits.push((planet.clone(), resource.clone()));
+                        star.res_factor = 1.0;
                     }
                 }
             }
-            self.diagnostics.filter_hits.sort_by(
-                |a, b| b.1.factor.partial_cmp(&a.1.factor).unwrap());
         }
         self.diagnostics.stars_with_planets_with_env_res = self.stars_with_planets_env_res();
     }

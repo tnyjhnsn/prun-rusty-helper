@@ -39,13 +39,18 @@ impl Component for Summary {
     fn view(&self) -> Html {
         let selected_res = &self.props.universe.selected_res;
         let diagnostics = &self.props.universe.diagnostics;
-        let summary = if selected_res.eq("- None -") { format!("Filter: {} Planets, {} Star Systems",
-            diagnostics.planets_with_env,
-            diagnostics.stars_with_planets_with_env_res)}
-        else {format!("Filter: {} Planets, {} Star Systems with {} resources",
-            diagnostics.planets_with_env_res(),
-            diagnostics.stars_with_planets_with_env_res,
-            selected_res)
+        let summary = match selected_res {
+            Some(res) => {
+                format!("Filter: {} Planets, {} Star Systems with {} resources",
+                    diagnostics.planets_with_env_res(),
+                    diagnostics.stars_with_planets_with_env_res,
+                    res)
+            }
+            None => {
+                format!("Filter: {} Planets, {} Star Systems",
+                    diagnostics.planets_with_env,
+                    diagnostics.stars_with_planets_with_env_res)
+            }
         };
         let top_hits: Vec::<(Planet, Resource)> = diagnostics.filter_hits
             .iter()

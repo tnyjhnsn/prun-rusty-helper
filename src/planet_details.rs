@@ -59,7 +59,10 @@ impl Component for PlanetDetails {
                         .map(|r| get_res_li(
                             r,
                             res_max_factor.get(&r.ticker).unwrap(),
-                            highlight_env && r.ticker.eq(selected_res)
+                            highlight_env && match selected_res {
+                                Some(res) => r.ticker.eq(res),
+                                None => false,
+                            }
                         ))
                     }
                 </ul>

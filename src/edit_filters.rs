@@ -10,7 +10,7 @@ pub struct Props {
     pub toggle_signal: Callback<(Toggle, bool)>,
     pub surface_signal: Callback<SurfaceOption>,
     pub env_signal: Callback<(Environment, EnvironmentOption)>,
-    pub selected_res_signal: Callback<String>,
+    pub selected_res_signal: Callback<Option<String>>,
 }
 
 pub enum Msg {
@@ -75,7 +75,11 @@ impl Component for EditFilters {
             }
             Msg::OnChangeSelectedRes(cd) => {
                 if let ChangeData::Select(res) = cd {
-                    self.props.selected_res_signal.emit(res.value());
+                    let v = match res.selected_index() {
+                        0 => None,
+                        _=> Some(res.value()),
+                    };
+                    self.props.selected_res_signal.emit(v);
                 } else {
                     ();
                 }
