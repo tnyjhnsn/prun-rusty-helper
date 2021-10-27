@@ -39,8 +39,7 @@ impl Component for StarSearch {
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
         match msg {
             Msg::SubmitSearch(e) => {
-                if let ChangeData::Value(mut select) = e {
-                    select.make_ascii_uppercase();
+                if let ChangeData::Value(select) = e {
                     self.props.search_star_signal.emit(select);
                 } else {
                     ();

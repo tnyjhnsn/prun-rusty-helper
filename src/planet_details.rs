@@ -1,5 +1,5 @@
 use yew::prelude::*;
-use crate::models::{Universe, Planet, Resource};
+use crate::models::{Planet, Resource, Universe};
 
 #[derive(Clone, PartialEq, Properties)]
 pub struct Props {
@@ -8,6 +8,7 @@ pub struct Props {
     pub highlight_env: bool,
     pub env_filter: bool,
     pub universe: Universe,
+    pub heading_click: Callback<String>,
 }
 
 #[allow(dead_code)]
@@ -16,8 +17,12 @@ pub struct PlanetDetails {
     props: Props,
 }
 
+pub enum Msg {
+    OnHeadingClick,
+}
+
 impl Component for PlanetDetails {
-    type Message = ();
+    type Message = Msg;
     type Properties = Props;
 
     fn create(props: Self::Properties, link: ComponentLink<Self>) -> Self {
@@ -33,7 +38,12 @@ impl Component for PlanetDetails {
         }
     }
 
-    fn update(&mut self, _msg: Self::Message) -> ShouldRender {
+    fn update(&mut self, msg: Self::Message) -> ShouldRender {
+        match msg {
+            Msg::OnHeadingClick => {
+                self.props.heading_click.emit(self.props.planet.nat_id.to_owned());
+            }
+        }
         false
     }
 
@@ -50,7 +60,10 @@ impl Component for PlanetDetails {
         html! {
             <div class="icon-heading">
                 <i class={class} />
-                <h4 class=classes!("heading", css_filtered)>
+                <h4
+                    class=classes!("heading", css_filtered)
+                    onclick=self.link.callback(|_e| Msg::OnHeadingClick)
+                >
                     {&self.props.planet.name}
                 </h4>
                 <ul class="base-build" hidden=true></ul>
@@ -69,6 +82,10 @@ impl Component for PlanetDetails {
             </div>
         }
     }
+
+    fn rendered(&mut self, _first_render: bool) {}
+
+    fn destroy(&mut self) {}
 }
 
 fn get_res_li(res: &Resource, max_factor: &f64, filtered: bool) -> Html {
@@ -88,6 +105,6 @@ fn get_res_li(res: &Resource, max_factor: &f64, filtered: bool) -> Html {
     let ratio = format!(" {}% ({}/{})", v1, v2, v3);
 
     html! {
-        <li class={f}>{ticker}<span class={colour}> {ratio}</span></li>
+        <li class={f}>{ticker}<span class={colour}>{ratio}</span></li>
     }
 }

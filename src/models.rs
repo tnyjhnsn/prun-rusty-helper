@@ -210,6 +210,7 @@ impl Universe {
     }
     // TODO Error checks to be added
     pub fn star_from_name(&self, name: String) -> Option<Star> {
+        let name = name.to_ascii_uppercase();
         match name.chars().nth(2).unwrap() {
             '-' => {
                 let text = &name[..6];

@@ -7,6 +7,7 @@ use crate::planet_details::PlanetDetails;
 pub struct Props {
     pub universe: Universe,
     pub env_filter: bool,
+    pub search_star_signal: Callback<String>,
 }
 
 #[allow(dead_code)]
@@ -15,8 +16,12 @@ pub struct Summary {
     props: Props,
 }
 
+pub enum Msg {
+    OnHeadingClick(String),
+}
+
 impl Component for Summary {
-    type Message = ();
+    type Message = Msg;
     type Properties = Props;
 
     fn create(props: Self::Properties, link: ComponentLink<Self>) -> Self {
@@ -32,7 +37,12 @@ impl Component for Summary {
         }
     }
 
-    fn update(&mut self, _msg: Self::Message) -> ShouldRender {
+    fn update(&mut self, msg: Self::Message) -> ShouldRender {
+        match msg {
+            Msg::OnHeadingClick(name) => {
+                self.props.search_star_signal.emit(name);
+            }
+        }
         false
     }
 
@@ -76,6 +86,7 @@ impl Component for Summary {
                                 highlight_env=false
                                 env_filter={self.props.env_filter}
                                 universe={&self.props.universe}
+                                heading_click=self.link.callback(Msg::OnHeadingClick)
                             />
                         }
                     })

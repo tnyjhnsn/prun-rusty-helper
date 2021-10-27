@@ -229,24 +229,28 @@ impl Component for PrUnApp {
                             <Logo is_loading=self.is_loading />
                             <MapScale
                                 scale_options=self.map_features.scale_options.clone()
-                                set_scale_signal=self.link.callback(Msg::SetScale) />
+                                set_scale_signal=self.link.callback(Msg::SetScale)
+                            />
                         </div>
                     </div>
                     <div class="panel2">
                         <div class="sticky">
                             <StarSearch
                                 star_list=self.universe.star_list.clone()
-                                search_star_signal=self.link.callback(Msg::SearchStar) />
+                                search_star_signal=self.link.callback(Msg::SearchStar)
+                            />
                         </div>
                     </div>
                     <div class="panel3">
                         <div class="sticky">
                             <ShowCx
                                 show_cx=self.map_features.show_cx
-                                toggle_signal=self.link.callback(Msg::Toggle) />
+                                toggle_signal=self.link.callback(Msg::Toggle)
+                            />
                             <ShowRoutes
                                 show_routes=self.map_features.show_routes
-                                toggle_signal=self.link.callback(Msg::Toggle) />
+                                toggle_signal=self.link.callback(Msg::Toggle)
+                            />
                             <EditFilters
                                 env_filter=self.filters.env_filter
                                 inc_normal=self.filters.inc_normal
@@ -259,6 +263,7 @@ impl Component for PrUnApp {
                             <Summary
                                 universe=&self.universe
                                 env_filter=self.filters.env_filter
+                                search_star_signal=self.link.callback(Msg::SearchStar)
                             />
                         </div>
                     </div>

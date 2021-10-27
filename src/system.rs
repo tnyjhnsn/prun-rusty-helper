@@ -1,4 +1,5 @@
 use yew::prelude::*;
+use yew::services::ConsoleService;
 
 use crate::models::Universe;
 use crate::planet_details::PlanetDetails;
@@ -15,8 +16,12 @@ pub struct System {
     props: Props,
 }
 
+pub enum Msg {
+    OnHeadingClick(String),
+}
+
 impl Component for System {
-    type Message = ();
+    type Message = Msg;
     type Properties = Props;
 
     fn create(props: Self::Properties, link: ComponentLink<Self>) -> Self {
@@ -32,7 +37,13 @@ impl Component for System {
         }
     }
 
-    fn update(&mut self, _msg: Self::Message) -> ShouldRender {
+    fn update(&mut self, msg: Self::Message) -> ShouldRender {
+        match msg {
+            Msg::OnHeadingClick(_s) => {
+                // TODO
+                ConsoleService::info(&format!("Feature not implimented yet"));
+            }
+        }
         false
     }
 
@@ -54,6 +65,7 @@ impl Component for System {
                                 highlight_env=true
                                 env_filter={self.props.env_filter}
                                 universe={&self.props.universe}
+                                heading_click=self.link.callback(Msg::OnHeadingClick)
                             />
                         }
                     })
