@@ -11,8 +11,6 @@ pub struct Map {
     pub height: f64,
     pub offset_x: f64,
     pub offset_y: f64,
-    pub show_cx: bool,
-    pub show_path: bool,
 }
 
 impl Map {
@@ -22,8 +20,6 @@ impl Map {
             height: 1700.0,
             offset_x: 1400.0,
             offset_y: 1700.0,
-            show_cx: true,
-            show_path: false,
         }
     }
 }
