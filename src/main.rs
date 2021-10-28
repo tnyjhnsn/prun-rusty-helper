@@ -136,6 +136,7 @@ impl Component for PrUnApp {
                     self.universe.fix_star_y();
                     self.is_loading = false;
                 }
+                self.universe.apply_filters(&self.filters);
                 return true
             }
             Msg::RespPlanet(resp) => {
@@ -144,6 +145,7 @@ impl Component for PrUnApp {
                     self.universe.create_star_list();
                     self.is_loading = false;
                 }
+                self.universe.apply_filters(&self.filters);
                 return true
             }
             Msg::RespResource(resp) => {
@@ -152,6 +154,7 @@ impl Component for PrUnApp {
                     self.universe.create_resource_data();
                     self.is_loading = false;
                 }
+                self.universe.apply_filters(&self.filters);
                 return true
             }
             Msg::SelectedStar(star) => {
