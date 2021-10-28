@@ -145,7 +145,10 @@ impl Canvas {
             let y = star.y.round();
 
             let is_current = self.current_star.sys_id == star.sys_id;
-            let is_selected = self.props.universe.selected_star.sys_id == star.sys_id;
+            let is_selected = match &self.props.universe.selected_star {
+                Some(s) => s.sys_id == star.sys_id,
+                None => false,
+            };
             //let is_last_selected = self.last_selected_star.sys_id == star.sys_id;
 
             if show_cx && self.cx.iter().any(|&i| i == star.nat_id) {

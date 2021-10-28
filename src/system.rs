@@ -48,29 +48,32 @@ impl Component for System {
     }
 
     fn view(&self) -> Html {
-        let selected_star = &self.props.universe.selected_star;
-        let heading = format!("Planets/Resources in the {} System",
-                              selected_star.name);
-        let loading = selected_star.name.eq(&"".to_string());
-        html! {
-            <div hidden={loading}>
-                <h3>{heading}</h3>
-                { for self.props.universe.planets_for_selected_star()
-                    .iter().map(|p| {
-                        let resources = self.props.universe.resources_for_planet(p);
-                        html! {
-                            <PlanetDetails
-                                planet={p}
-                                resources={resources}
-                                highlight_env=true
-                                env_filter={self.props.env_filter}
-                                universe={&self.props.universe}
-                                heading_click=self.link.callback(Msg::OnHeadingClick)
-                            />
-                        }
-                    })
-                }
-            </div>
+        if let Some(selected_star) = &self.props.universe.selected_star {
+            let heading = format!("Planets/Resources in the {} System",
+                                  selected_star.name);
+            let loading = selected_star.name.eq(&"".to_string());
+            html! {
+                <div hidden={loading}>
+                    <h3>{heading}</h3>
+                    { for self.props.universe.planets_for_selected_star()
+                        .iter().map(|p| {
+                            let resources = self.props.universe.resources_for_planet(p);
+                            html! {
+                                <PlanetDetails
+                                    planet={p}
+                                    resources={resources}
+                                    highlight_env=true
+                                    env_filter={self.props.env_filter}
+                                    universe={&self.props.universe}
+                                    heading_click=self.link.callback(Msg::OnHeadingClick)
+                                />
+                            }
+                        })
+                    }
+                </div>
+            }
+        } else {
+            html! {<></>}
         }
     }
 }

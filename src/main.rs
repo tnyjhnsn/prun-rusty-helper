@@ -155,7 +155,7 @@ impl Component for PrUnApp {
                 return true
             }
             Msg::SelectedStar(star) => {
-                self.universe.selected_star = star;
+                self.universe.selected_star = Some(star);
                 return true
             }
             Msg::SetScale(scale) => {

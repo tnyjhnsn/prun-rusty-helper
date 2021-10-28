@@ -147,7 +147,7 @@ impl Star {
 #[derive(PartialEq, Clone, Debug)]
 pub struct Universe {
     pub stars: Vec<Star>,
-    pub selected_star: Star,
+    pub selected_star: Option<Star>,
     pub planets: Vec<Planet>,
     pub resources: Vec<Resource>,
     pub star_list: Vec<String>,
@@ -163,7 +163,7 @@ impl Universe {
     pub fn new() -> Self {
         Self {
             stars: Vec::new(),
-            selected_star: Star::new(),
+            selected_star: None,
             planets: Vec::new(),
             resources: Vec::new(),
             star_list: Vec::new(),
@@ -301,9 +301,10 @@ impl Universe {
             .count()
     }
     pub fn planets_for_selected_star(&self) -> Vec<Planet> {
+        let star = self.selected_star.as_ref().unwrap();
         self.planets
             .iter()
-            .filter(|p| p.sys_id.eq(&self.selected_star.sys_id))
+            .filter(|p| p.sys_id.eq(&star.sys_id))
             .cloned()
             .collect()
     }
