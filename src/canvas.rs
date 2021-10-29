@@ -248,7 +248,7 @@ impl Component for Canvas {
                 let scale = self.props.map_features.selected_scale;
                 let offset_x = self.map.offset_x;
                 let offset_y = self.map.offset_y;
-                let mut best_fit = Star::new();
+                let mut best_fit = None;
                 let mut distance = 0.0;
                 let canvas: HtmlCanvasElement = self.canvas.cast().unwrap();
                 let bx = canvas.get_bounding_client_rect();
@@ -257,16 +257,12 @@ impl Component for Canvas {
 
                 for star in &self.props.universe.stars {
                     let d = (star.x - x1).powf(2.0) + (star.y - y1).powf(2.0);
-                    if best_fit.sys_id == "" {
-                        best_fit = star.clone();
-                        distance = d;
-                    } else if d < distance {
-                        best_fit = star.clone();
+                    if best_fit == None || d < distance {
+                        best_fit = Some(star);
                         distance = d;
                     };
-
                 }
-                self.current_star = best_fit;
+                self.current_star = best_fit.unwrap().clone();
                 self.draw();
             }
         }
