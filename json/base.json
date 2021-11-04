@@ -1,0 +1,99 @@
+[
+  [
+    "base",
+    [
+      {
+        "ticker": "LSE",
+        "amount": 4
+      },
+      {
+        "ticker": "TRU",
+        "amount": 8
+      },
+      {
+        "ticker": "PSL",
+        "amount": 12
+      },
+      {
+        "ticker": "LDE",
+        "amount": 4
+      },
+      {
+        "ticker": "LTA",
+        "amount": 4
+      }
+    ]
+  ],
+  [
+    "rocky",
+    [
+      {
+        "ticker": "MCG",
+        "amount": 100
+      }
+    ]
+  ],
+  [
+    "gaseous",
+    [
+      {
+        "ticker": "AEF",
+        "amount": 9
+      }
+    ]
+  ],
+  [
+    "lowGravity",
+    [
+      {
+        "ticker": "MGC",
+        "amount": 1
+      }
+    ]
+  ],
+  [
+    "highGravity",
+    [
+      {
+        "ticker": "BL",
+        "amount": 1
+      }
+    ]
+  ],
+  [
+    "lowTemp",
+    [
+      {
+        "ticker": "INS",
+        "amount": 250
+      }
+    ]
+  ],
+  [
+    "highTemp",
+    [
+      {
+        "ticker": "TSH",
+        "amount": 1
+      }
+    ]
+  ],
+  [
+    "lowPressure",
+    [
+      {
+        "ticker": "SEA",
+        "amount": 25
+      }
+    ]
+  ],
+  [
+    "highPressure",
+    [
+      {
+        "ticker": "HSE",
+        "amount": 1
+      }
+    ]
+  ]
+]

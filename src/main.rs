@@ -81,6 +81,7 @@ impl Component for PrUnApp {
             Msg::MakeStarReq => {
                 self.is_loading = true;
                 let req = Request::get("http://localhost:8081/stars.json")
+                //let req = Request::get("http://nimbus.tosp.net.au/json/stars.json")
                     .body(Nothing)
                     .expect("can make req");
 
@@ -99,6 +100,7 @@ impl Component for PrUnApp {
             Msg::MakePlanetReq => {
                 self.is_loading = true;
                 let req = Request::get("http://localhost:8081/planets.json")
+                //let req = Request::get("http://nimbus.tosp.net.au/json/planets.json")
                     .body(Nothing)
                     .expect("can make req");
 
@@ -116,6 +118,7 @@ impl Component for PrUnApp {
             Msg::MakeResourceReq => {
                 self.is_loading = true;
                 let req = Request::get("http://localhost:8081/resources.json")
+                //let req = Request::get("http://nimbus.tosp.net.au/json/resources.json")
                     .body(Nothing)
                     .expect("can make req");
 
