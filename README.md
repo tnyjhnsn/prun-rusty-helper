@@ -1,5 +1,5 @@
 # prun-rusty-helper
 
-[Demo Here](http://nimbus.tosp.net.au)
+[Demo Here](http://nimbus.tosp.net.au/prun.html)
 
 
