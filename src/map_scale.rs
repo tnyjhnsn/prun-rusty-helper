@@ -44,8 +44,6 @@ impl Component for MapScale {
                 if let ChangeData::Select(select) = cd {
                     let v = select.value().parse::<f64>().unwrap();
                     self.props.set_scale_signal.emit(v);
-                } else {
-                    ();
                 }
             }
         }

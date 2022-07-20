@@ -74,7 +74,7 @@ impl Component for Summary {
                 <div style="margin: '0.5rem';">
                     {summary}
                 </div>
-                <h3>{if top_hits.len() > 0 {title} else {"".to_string()}}</h3>
+                <h3>{if !top_hits.is_empty() {title} else {"".to_string()}}</h3>
                 { for top_hits
                     .into_iter()
                     .map(|(p, r)| {

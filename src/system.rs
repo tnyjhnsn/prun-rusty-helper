@@ -41,7 +41,7 @@ impl Component for System {
         match msg {
             Msg::OnHeadingClick(_s) => {
                 // TODO
-                ConsoleService::info(&format!("Feature not implimented yet"));
+                ConsoleService::info("Feature not implimented yet");
             }
         }
         false

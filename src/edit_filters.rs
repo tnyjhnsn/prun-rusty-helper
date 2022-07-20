@@ -14,10 +14,10 @@ pub struct Props {
 }
 
 pub enum Msg {
-    OnChangeToggle(Toggle),
-    OnChangeSurface(ChangeData),
-    OnChangeEnvironment(Environment, ChangeData),
-    OnChangeSelectedRes(ChangeData),
+    Toggle(Toggle),
+    Surface(ChangeData),
+    Environment(Environment, ChangeData),
+    SelectedRes(ChangeData),
 }
 
 #[allow(dead_code)]
@@ -48,7 +48,7 @@ impl Component for EditFilters {
 
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
         match msg {
-            Msg::OnChangeToggle(toggle) => {
+            Msg::Toggle(toggle) => {
                 if let Toggle::IncEnvFilter = toggle {
                     let v = !self.props.env_filter;
                     self.props.toggle_signal.emit((Toggle::IncEnvFilter, v));
@@ -57,31 +57,25 @@ impl Component for EditFilters {
                     self.props.toggle_signal.emit((Toggle::IncNormal, v));
                 }
             }
-            Msg::OnChangeSurface(cd) => {
+            Msg::Surface(cd) => {
                 if let ChangeData::Select(select) = cd {
                     let surface = to_surface_option(&select.value());
                     self.props.surface_signal.emit(surface);
-                } else {
-                    ();
-                }
+                } 
             }
-            Msg::OnChangeEnvironment(env, cd) => {
+            Msg::Environment(env, cd) => {
                 if let ChangeData::Select(select) = cd {
                     let option = to_env_option(&select.value());
                     self.props.env_signal.emit((env, option));
-                } else {
-                    ();
                 }
             }
-            Msg::OnChangeSelectedRes(cd) => {
+            Msg::SelectedRes(cd) => {
                 if let ChangeData::Select(res) = cd {
                     let v = match res.selected_index() {
                         0 => None,
                         _=> Some(res.value()),
                     };
                     self.props.selected_res_signal.emit(v);
-                } else {
-                    ();
                 }
             }
         }
@@ -90,13 +84,13 @@ impl Component for EditFilters {
 
     fn view(&self) -> Html {
         let gravity_callback =
-            |cd| Msg::OnChangeEnvironment(Environment::Gravity, cd);
+            |cd| Msg::Environment(Environment::Gravity, cd);
         let temp_callback =
-            |cd| Msg::OnChangeEnvironment(Environment::Temp, cd);
+            |cd| Msg::Environment(Environment::Temp, cd);
         let pressure_callback =
-            |cd| Msg::OnChangeEnvironment(Environment::Pressure, cd);
-        let env_filter_callback = |_| Msg::OnChangeToggle(Toggle::IncEnvFilter);
-        let inc_normal_callback = |_| Msg::OnChangeToggle(Toggle::IncNormal);
+            |cd| Msg::Environment(Environment::Pressure, cd);
+        let env_filter_callback = |_| Msg::Toggle(Toggle::IncEnvFilter);
+        let inc_normal_callback = |_| Msg::Toggle(Toggle::IncNormal);
 
         let rocky = SurfaceOption::Rocky.to_string();
         let gaseous = SurfaceOption::Gaseous.to_string();
@@ -111,7 +105,7 @@ impl Component for EditFilters {
                 {"Environment Filter"}
                     <div>
                         <select
-                            onchange=self.link.callback(|cd| Msg::OnChangeSurface(cd))
+                            onchange=self.link.callback(Msg::Surface)
                         >
                             <option value={rocky.clone()}>{rocky}</option>
                             <option value={gaseous.clone()}>{gaseous}</option>
@@ -138,7 +132,7 @@ impl Component for EditFilters {
                     <div>
                     {"Include Resource Filter:"}
                         <select
-                            onchange=self.link.callback(|cd| Msg::OnChangeSelectedRes(cd))
+                            onchange=self.link.callback(Msg::SelectedRes)
                         >
                         { for self.props.res_list.iter().map(|k| {
                             html! { <option value={k.to_string()}>{k}</option> }

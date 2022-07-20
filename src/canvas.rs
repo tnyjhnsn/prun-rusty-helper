@@ -94,12 +94,12 @@ impl Canvas {
             Fill::Filled => {
                 ctx.begin_path();
                 ctx.arc(x, y, size, 0.0, 2.0 * f64::consts::PI).unwrap();
-                ctx.set_fill_style(&JsValue::from_str(&col));
+                ctx.set_fill_style(&JsValue::from_str(col));
                 ctx.fill();
             }
             Fill::Halo => {
                 ctx.set_line_width(size);
-                ctx.set_stroke_style(&JsValue::from_str(&col));
+                ctx.set_stroke_style(&JsValue::from_str(col));
                 for i in 0..4 {
                     let j = i as f64;
                     ctx.begin_path();
@@ -112,10 +112,10 @@ impl Canvas {
             }
             Fill::Cx => {
                 ctx.set_line_width(2.0);
-                ctx.set_stroke_style(&JsValue::from_str(&col));
+                ctx.set_stroke_style(&JsValue::from_str(col));
                 ctx.begin_path();
                 ctx.arc(x, y, size, 0.0, 2.0 * f64::consts::PI).unwrap();
-                ctx.set_fill_style(&JsValue::from_str(&col));
+                ctx.set_fill_style(&JsValue::from_str(col));
                 ctx.stroke();
             }
         }
@@ -189,13 +189,13 @@ impl Canvas {
                 let s = format!("{} (Type {})", star.name, star.typ);
 
                 ctx.set_font("40px 'Open Sans'");
-                ctx.set_fill_style(&JsValue::from_str(&"rgba(255,255,255,1.0"));
+                ctx.set_fill_style(&JsValue::from_str("rgba(255,255,255,1.0"));
                 ctx.fill_text(&s, x + 20.0, y - 15.0).unwrap();
                 let tm = ctx.measure_text(&s).unwrap();
-                ctx.set_fill_style(&JsValue::from_str(&"rgba(158,158,158,0.15"));
+                ctx.set_fill_style(&JsValue::from_str("rgba(158,158,158,0.15"));
                 ctx.fill_rect(x + 5.0, y - 70.0, tm.width() + 30.0, 80.0);
                 ctx.set_line_width(2.0);
-                ctx.set_stroke_style(&JsValue::from_str(&"rgba(255,255,255,0.3"));
+                ctx.set_stroke_style(&JsValue::from_str("rgba(255,255,255,0.3"));
                 ctx.stroke_rect(x + 5.0, y - 70.0, tm.width() + 30.0, 80.0);
             }
 
@@ -203,7 +203,7 @@ impl Canvas {
                 self.draw_star_circle(&ctx, x, y, StarSize::SMALL,
                     StarColour::CURRENT, Fill::Filled);
                 ctx.set_font("40px 'Open Sans'");
-                ctx.set_fill_style(&JsValue::from_str(&"rgba(255,255,255,1.0"));
+                ctx.set_fill_style(&JsValue::from_str("rgba(255,255,255,1.0"));
                 ctx.fill_text(&star.name, x + 20.0, y - 15.0).unwrap();
             }
         }

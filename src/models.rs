@@ -1,6 +1,7 @@
 use serde_derive::Deserialize;
 use yew::html::ImplicitClone;
 use std::collections::HashMap;
+use std::fmt;
 
 #[derive(PartialEq, Clone, Debug)]
 pub struct Diagnostics {
@@ -103,7 +104,7 @@ impl Planet {
     }
 }
 
-#[derive(Deserialize, PartialEq, Clone, Debug)]
+#[derive(Deserialize, PartialEq, Eq, Clone, Debug)]
 pub struct Connection {
     pub connection: String,
 }
@@ -244,7 +245,7 @@ impl Universe {
         self.diagnostics = Diagnostics::new();
 
         for planet in &mut self.planets {
-            if planet.apply_filters(&filters) {
+            if planet.apply_filters(filters) {
                 self.diagnostics.planets_with_env += 1;
             }
         }
@@ -359,20 +360,16 @@ impl MapFeatures {
     }
 }
 
-#[derive(PartialEq, Clone, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 pub enum SurfaceOption {
     Rocky,
     Gaseous,
     Both,
 }
 
-impl SurfaceOption {
-    pub fn to_string(&self) -> String {
-        match self {
-            Self::Rocky => String::from("Rocky"),
-            Self::Gaseous => String::from("Gaseous"),
-            Self::Both => String::from("Both"),
-        }
+impl fmt::Display for SurfaceOption {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{:?}", self)
     }
 }
 
@@ -384,14 +381,14 @@ pub fn to_surface_option(s: &str) -> SurfaceOption {
     }
 }
 
-#[derive(PartialEq, Clone, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 pub enum Environment {
     Gravity,
     Temp,
     Pressure,
 }
 
-#[derive(PartialEq, Clone, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 pub enum EnvironmentOption {
     Normal,
     Low,
@@ -399,14 +396,9 @@ pub enum EnvironmentOption {
     Ignore,
 }
 
-impl EnvironmentOption {
-    pub fn to_string(&self) -> String {
-        match self {
-            Self::Low => String::from("Low"),
-            Self::Normal => String::from("Normal"),
-            Self::High => String::from("High"),
-            Self::Ignore => String::from("Ignore"),
-        }
+impl fmt::Display for EnvironmentOption {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{:?}", self)
     }
 }
 

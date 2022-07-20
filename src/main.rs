@@ -81,7 +81,7 @@ impl Component for PrUnApp {
             Msg::MakeStarReq => {
                 self.is_loading = true;
                 let req = Request::get("http://localhost:8081/stars.json")
-                //let req = Request::get("http://nimbus.tosp.net.au/json/stars.json")
+                    //let req = Request::get("http://nimbus.tosp.net.au/json/stars.json")
                     .body(Nothing)
                     .expect("can make req");
 
@@ -92,15 +92,14 @@ impl Component for PrUnApp {
                     },
                 );
 
-                let task = FetchService::fetch(req, cb)
-                    .expect("can create task");
+                let task = FetchService::fetch(req, cb).expect("can create task");
                 self.fetch_stars = Some(task);
-                return false
+                false
             }
             Msg::MakePlanetReq => {
                 self.is_loading = true;
                 let req = Request::get("http://localhost:8081/planets.json")
-                //let req = Request::get("http://nimbus.tosp.net.au/json/planets.json")
+                    //let req = Request::get("http://nimbus.tosp.net.au/json/planets.json")
                     .body(Nothing)
                     .expect("can make req");
 
@@ -113,12 +112,12 @@ impl Component for PrUnApp {
 
                 let task = FetchService::fetch(req, cb).expect("can create task");
                 self.fetch_planets = Some(task);
-                return false
+                false
             }
             Msg::MakeResourceReq => {
                 self.is_loading = true;
                 let req = Request::get("http://localhost:8081/resources.json")
-                //let req = Request::get("http://nimbus.tosp.net.au/json/resources.json")
+                    //let req = Request::get("http://nimbus.tosp.net.au/json/resources.json")
                     .body(Nothing)
                     .expect("can make req");
 
@@ -131,7 +130,7 @@ impl Component for PrUnApp {
 
                 let task = FetchService::fetch(req, cb).expect("can create task");
                 self.fetch_resources = Some(task);
-                return false
+                false
             }
             Msg::RespStar(resp) => {
                 if let Ok(data) = resp {
@@ -140,7 +139,7 @@ impl Component for PrUnApp {
                     self.is_loading = false;
                 }
                 self.universe.apply_filters(&self.filters);
-                return true
+                true
             }
             Msg::RespPlanet(resp) => {
                 if let Ok(data) = resp {
@@ -149,7 +148,7 @@ impl Component for PrUnApp {
                     self.is_loading = false;
                 }
                 self.universe.apply_filters(&self.filters);
-                return true
+                true
             }
             Msg::RespResource(resp) => {
                 if let Ok(data) = resp {
@@ -158,21 +157,22 @@ impl Component for PrUnApp {
                     self.is_loading = false;
                 }
                 self.universe.apply_filters(&self.filters);
-                return true
+                true
             }
             Msg::SelectedStar(star) => {
                 self.universe.selected_star = Some(star);
-                return true
+                true
             }
             Msg::SetScale(scale) => {
                 self.map_features.set_selected_scale(scale);
-                return true
+                true
             }
             Msg::SearchStar(name) => {
                 if let Some(star) = self.universe.star_from_name(name) {
-                    self.link.callback(Msg::SelectedStar).emit(star);
+                    //self.link.callback(Msg::SelectedStar).emit(star);
+                    self.universe.selected_star = Some(star);
                 }
-                return false
+                false
             }
             Msg::Toggle((toggle, b)) => {
                 match toggle {
@@ -181,18 +181,18 @@ impl Component for PrUnApp {
                     Toggle::IncEnvFilter => {
                         self.filters.env_filter = b;
                         self.universe.apply_filters(&self.filters);
-                    },
+                    }
                     Toggle::IncNormal => {
                         self.filters.inc_normal = b;
                         self.universe.apply_filters(&self.filters);
-                    },
+                    }
                 };
-                return true
+                true
             }
             Msg::Surface(surface) => {
                 self.filters.surface = surface;
                 self.universe.apply_filters(&self.filters);
-                return true
+                true
             }
             Msg::Environment((env, option)) => {
                 match env {
@@ -201,18 +201,17 @@ impl Component for PrUnApp {
                     Environment::Pressure => self.filters.pressure = option,
                 }
                 self.universe.apply_filters(&self.filters);
-                return true
+                true
             }
             Msg::SelectedRes(res) => {
                 self.universe.selected_res = res;
                 self.universe.apply_filters(&self.filters);
-                return true
+                true
             }
             Msg::TestMe => {
                 //self.filter_editor.apply_filters(&self.universe.planets);
-                return true
-            }
-            // put a return value @ end of each Msg
+                true
+            } // put a return value @ end of each Msg
         }
     }
 

@@ -41,8 +41,6 @@ impl Component for StarSearch {
             Msg::SubmitSearch(e) => {
                 if let ChangeData::Value(select) = e {
                     self.props.search_star_signal.emit(select);
-                } else {
-                    ();
                 }
             }
         }

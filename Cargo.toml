@@ -9,7 +9,7 @@ edition = "2018"
 #crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-yew = "0.18"
+yew = "0.18.0"
 wasm-bindgen = "0.2.67"
 serde = "1"
 serde_derive = "1"
